@@ -1,5 +1,6 @@
-import { makeUrlShort } from "@/lib/utils";
 import { NextResponse } from "next/server";
+import { makeUrlShort } from "@/lib/utils";
+import { client } from '@/db/turso'
 
 export async function POST(request: Request) {
   const { urlText } = await request.json()
@@ -8,8 +9,13 @@ export async function POST(request: Request) {
   }
 
   const shortUrl = makeUrlShort(6)
+  
+  // Save it in a database
+  await client.execute({
+    sql: "INSERT INTO links (shortUrl, originalUrl) VALUES (? ,?)",
+    args: [shortUrl, urlText]
+  });
 
-  // // Save it in a database
-  // console.log(shortUrl)
-  return NextResponse.json({urlText})
+  const result = await client.execute("SELECT rowid, shortUrl, originalUrl FROM links");
+  return NextResponse.json({data: result.rows[0]}, {status: 200})
 }
