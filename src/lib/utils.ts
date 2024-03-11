@@ -6,3 +6,8 @@ export const makeUrlShort = (length: number) => {
   }
   return result
 }
+
+export const getValidUrl = (link: string) => {
+  if(link.includes('http://') || link.includes('https://')) return link
+  else return `https://${link}`
+}

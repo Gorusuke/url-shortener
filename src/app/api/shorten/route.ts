@@ -16,6 +16,7 @@ export async function POST(request: Request) {
     args: [shortUrl, urlText]
   });
 
+  // return last record
   const result = await client.execute("SELECT rowid, shortUrl, originalUrl FROM links");
-  return NextResponse.json({data: result.rows[0]}, {status: 200})
+  return NextResponse.json({data: result.rows.reverse()[0]}, {status: 200})
 }
