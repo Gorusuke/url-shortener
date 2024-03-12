@@ -1,15 +1,18 @@
 'use client'
 
-import { MouseEvent, useEffect, useState } from "react";
+import { MouseEvent, Suspense, useEffect, useState } from "react";
 import { LinksData } from "@/lib/interfaces";
-import LinkIcon from "@/ui/linkIcon";
+import LinkIcon from "@/ui/Icons/linkIcon";
 import styles from "./page.module.css";
+import CopyIcon from "@/ui/Icons/copyIcon";
+import Tooltip from "@/ui/tooltip";
 
 export default function Home() {
   const [route, setRoute] = useState('')
   const [urlText, setUrlText] = useState('')
   const [lastLink, setLastLink] = useState({})
   const [allLinks, setAllLinks] = useState<LinksData[]>([])
+  const [copy, setCopy] = useState(false)
 
   const createUrlShort = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
@@ -51,6 +54,35 @@ export default function Home() {
           />
           <button className={styles.button} onClick={createUrlShort}>Short Url</button>
         </div>
+        {Boolean(allLinks.length) &&
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th className={`${styles.cell} ${styles.cells}`}>Short Link</th>
+                <th className={`${styles.cell} ${styles.cells}`}>Original Link</th>
+              </tr>
+            </thead>
+            <tbody>
+              {allLinks.toReversed().map((link) => 
+                <tr key={link.rowid}>
+                  <td className={styles.cells}>
+                    <div className={styles.cellWithIcon}>
+                      {`${route}/go/${link.shortUrl}`}
+                      <Tooltip wasCopied={copy}>
+                        <CopyIcon 
+                          className={styles.copyIcon} 
+                          setCopy={setCopy}
+                          link={`${route}/go/${link.shortUrl}`} 
+                        />
+                      </Tooltip>
+                    </div>
+                  </td>
+                  <td className={styles.cells}>{link.originalUrl}</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        }
       </main>
     </>
   );
