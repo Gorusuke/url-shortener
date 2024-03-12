@@ -1,8 +1,8 @@
 'use client'
 
-import { copyIconProps } from "@/lib/interfaces";
+import { CopyIconProps } from "@/lib/interfaces";
 
-const CopyIcon = ({className, link, setCopy}: copyIconProps) => {
+const CopyIcon = ({className, link, setCopy}: CopyIconProps) => {
 
   const copyClipboard = async (txt: string) => {
     try {
