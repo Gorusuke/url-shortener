@@ -3,3 +3,9 @@ export interface LinksData {
   shortUrl: string
   originalUrl: string
 }
+
+export interface copyIconProps {
+  className: string
+  link: string
+  setCopy: (arg: boolean) => void
+}
