@@ -46,7 +46,7 @@ const TableLink = ({deleteShortUrl, onClick, lastLink}: TableLinkProps) => {
                 </Tooltip>
               </div>
             </td>
-            <td className={styles.cells}>{link.originalUrl}</td>
+            <td className={`${styles.cells} ${styles.longCell}`}>{link.originalUrl}</td>
             <td className={styles.cells}>
               <div className={styles.cellWithIcon}>
                 <EditIcon onClick={() => onClick(link.originalUrl, link.shortUrl)} />

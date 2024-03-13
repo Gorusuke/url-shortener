@@ -63,12 +63,15 @@
 }
 
 .cells {
+  border: 2px solid #000;
+  padding: 8px;
+}
+
+.longCell {
   max-width: 450px;
   text-wrap: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  border: 2px solid #000;
-  padding: 8px;
 }
 
 .cellWithIcon {

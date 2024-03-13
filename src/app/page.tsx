@@ -1,16 +1,10 @@
 'use client'
 
-import { MouseEvent, Suspense, useEffect, useState } from "react";
-import { LinksData } from "@/lib/interfaces";
-import LinkIcon from "@/ui/Icons/linkIcon";
-import styles from "./page.module.css";
-import CopyIcon from "@/ui/Icons/copyIcon";
-import Tooltip from "@/ui/tooltip";
-import EditIcon from "@/ui/Icons/editIcon";
-import DeleteIcon from "@/ui/Icons/deleteIcon";
+import { MouseEvent, useState } from "react";
 import InputSearch from "@/ui/inputSearch";
 import TableLink from "@/ui/tableLink";
 import EditSearch from "@/ui/editSearch";
+import styles from "./page.module.css";
 
 export default function Home() {
   const [urlText, setUrlText] = useState('')
@@ -20,6 +14,10 @@ export default function Home() {
 
   const createUrlShort = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
+    if(!urlText) {
+      alert('You need to enter a value')
+      return
+    }
     const result = await fetch('/api/shorten', {
       method: 'POST',
       headers: {
@@ -33,6 +31,10 @@ export default function Home() {
   }
 
   const editShortUrl = async () => {
+    if(!urlText) {
+      alert('You need to enter a value')
+      return
+    }
     if(isEditing && newUrl) {
       const result = await fetch(`/api/shorten/${newUrl}`, {
         method: 'PUT',
