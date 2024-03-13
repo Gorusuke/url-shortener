@@ -22,6 +22,13 @@ export interface InputSearchProps {
 
 export interface TableLinkProps {
   deleteShortUrl: (arg: string) => void
-  onClick: (arg: string) => void
+  onClick: (arg: string, url: string) => void
   lastLink: string
+}
+
+export interface EditSearchProps {
+  urlText: string
+  setUrlText: (arg: string) => void
+  handleCancel: () => void
+  editShortUrl: () => void
 }
