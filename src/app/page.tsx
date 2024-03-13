@@ -6,13 +6,17 @@ import LinkIcon from "@/ui/Icons/linkIcon";
 import styles from "./page.module.css";
 import CopyIcon from "@/ui/Icons/copyIcon";
 import Tooltip from "@/ui/tooltip";
+import EditIcon from "@/ui/Icons/editIcon";
+import DeleteIcon from "@/ui/Icons/deleteIcon";
+import InputSearch from "@/ui/inputSearch";
+import TableLink from "@/ui/tableLink";
+import EditSearch from "@/ui/editSearch";
 
 export default function Home() {
-  const [route, setRoute] = useState('')
   const [urlText, setUrlText] = useState('')
-  const [lastLink, setLastLink] = useState({})
-  const [allLinks, setAllLinks] = useState<LinksData[]>([])
-  const [copy, setCopy] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
+  const [updateEffect, setUpdateEffect] = useState('')
+  const [newUrl, setNewUrl] = useState('')
 
   const createUrlShort = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
@@ -24,65 +28,76 @@ export default function Home() {
       body: JSON.stringify({urlText})
     })
     const res = await result.json()
-    setLastLink(res.data)
+    setUpdateEffect(res.data)
     setUrlText('')
   }
 
-  useEffect(() => {
-    setRoute(window.location.origin)
-    const getLinks = async () => {
-      const allLinks = await fetch('/api/links')
-      const links = await allLinks.json()
-      setAllLinks(links.data);
+  const editShortUrl = async () => {
+    if(isEditing && newUrl) {
+      const result = await fetch(`/api/shorten/${newUrl}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({value: urlText})
+      })
+      console.log(result)
+      if(result.status === 200) {
+        setUpdateEffect(prev => prev + 'edit')
+      }
+      setIsEditing(false)
     }
-    getLinks()
-  }, [lastLink])
+    setUrlText('')
+  } 
+
+  const deleteShortUrl = async (id: string) => {
+    const result = await fetch(`/api/shorten/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    if(result.status === 200){
+      setUpdateEffect(prev => prev + 'delete')
+    }
+    setUrlText('')
+  } 
+
+  const handleEdit = (value: string, shortUrl: string) => {
+    setUrlText(value)
+    setIsEditing(true)
+    setNewUrl(shortUrl)
+  }
+
+  const handleCancel = () => {
+    setUrlText('')
+    setIsEditing(false)
+  }
 
   return (
     <>
       <main className={styles.main}>
         <h1 className={styles.title}>Shorten Your Loooong Links!</h1>
         <p className={styles.subtitle}>Linky is an efficient and easy-to-use URL shortening service that streamlines your online experience.</p>
-        <div className={styles.search}>
-          <LinkIcon className={styles.icon}/>
-          <input 
-            className={styles.input}
-            type="text"
-            placeholder="Enter the link here..."
-            value={urlText}
-            onChange={(e) => setUrlText(e.target.value)}
-          />
-          <button className={styles.button} onClick={createUrlShort}>Short Url</button>
-        </div>
-        {Boolean(allLinks.length) &&
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th className={`${styles.cell} ${styles.cells}`}>Short Link</th>
-                <th className={`${styles.cell} ${styles.cells}`}>Original Link</th>
-              </tr>
-            </thead>
-            <tbody>
-              {allLinks.toReversed().map((link) => 
-                <tr key={link.rowid}>
-                  <td className={styles.cells}>
-                    <div className={styles.cellWithIcon}>
-                      {`${route}/go/${link.shortUrl}`}
-                      <Tooltip wasCopied={copy}>
-                        <CopyIcon 
-                          className={styles.copyIcon} 
-                          setCopy={setCopy}
-                          link={`${route}/go/${link.shortUrl}`} 
-                        />
-                      </Tooltip>
-                    </div>
-                  </td>
-                  <td className={styles.cells}>{link.originalUrl}</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+        {isEditing 
+          ? <EditSearch 
+              urlText={urlText} 
+              setUrlText={setUrlText} 
+              handleCancel={handleCancel}
+              editShortUrl={editShortUrl}
+            />
+          : <InputSearch 
+              urlText={urlText} 
+              setUrlText={setUrlText}
+              isEditing={isEditing} 
+              onClick={createUrlShort}
+            />
         }
+        <TableLink 
+          deleteShortUrl={deleteShortUrl} 
+          onClick={handleEdit}
+          lastLink={updateEffect}
+        />
       </main>
     </>
   );
