@@ -1,18 +1,22 @@
-'use client'
-
 import styles from '@/app/page.module.css'
 import Link from "next/link";
-import { signIn, useSession } from 'next-auth/react';
+import { auth } from '@/auth';
+import Button from './button';
 
-const Header = () => {
-  const {data: session} = useSession()
-  console.log(session);
+const Header = async () => {
+  const session = await auth();
   
   return (
     <header>
       <nav className={styles.nav}>
         <Link href={'/'} className={styles.logo}>SHORTEN-URL</Link>
-        <button onClick={() => signIn()} className={styles.modifyButton}>Login</button>
+        {session?.user
+          ? <div className={styles.dashboardContainer}>
+              <Link href={'/dashboard'}>Dashboard</Link>
+              <Button text='Log out' />
+            </div>
+          : <Button text='Login' />
+        }
       </nav>
     </header>
   )
