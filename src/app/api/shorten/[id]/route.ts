@@ -20,7 +20,7 @@ export async function DELETE(request: Request, {params}: {params: {id: string}})
 export async function PUT(request: Request, {params}: {params: {id: string}}) {
   const { id } = params;
   const { value } = await request.json()
-  // console.log({id, value})
+
   try {
     const result = await client.execute({
       sql: "UPDATE links SET originalUrl = ? WHERE shortUrl = ?",
