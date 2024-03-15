@@ -32,8 +32,8 @@ const TableLink = ({deleteShortUrl, onClick, lastLink}: TableLinkProps) => {
         </tr>
       </thead>
       <tbody>
-        {allLinks.toReversed().map((link) => 
-          <tr key={link.rowid}>
+        {allLinks.toReversed().map((link, idx) => 
+          <tr key={link.shortUrl + idx}>
             <td className={styles.cells}>
               <div className={styles.cellWithIcon}>
                 {`${route}/go/${link.shortUrl}`}

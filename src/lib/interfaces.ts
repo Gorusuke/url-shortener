@@ -16,7 +16,6 @@ export interface CopyIconProps {
 export interface InputSearchProps {
   urlText: string
   setUrlText: (arg: string) => void
-  isEditing: boolean
   onClick: (e: MouseEvent<HTMLButtonElement>) => void
 }
 

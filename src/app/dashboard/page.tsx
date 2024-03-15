@@ -5,11 +5,9 @@ import DashboardUI from "@/ui/dashboardUI";
 export default async function Dashboard () {
   const session = await auth();
 
-  console.log(session?.user)
-
   if(!session?.user) {
     redirect('/')
   }
 
-  return <DashboardUI/>
+  return <DashboardUI user={session?.user}/>
 }
