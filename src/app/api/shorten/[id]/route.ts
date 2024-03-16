@@ -8,9 +8,16 @@ export async function DELETE(request: Request, {params}: {params: {id: string}})
       sql: "DELETE FROM links WHERE shortUrl = ?",
       args: [id]
     });
-    if(result.rowsAffected === 0) {
+
+    const userResult = await client.execute({
+      sql: "DELETE FROM users_link WHERE shortUrl = ?",
+      args: [id]
+    });
+
+    if(result.rowsAffected === 0 || userResult.rowsAffected === 0) {
       return NextResponse.json({message: 'Url not found'}, {status: 404})
     }
+
     return NextResponse.json({message: 'Url was deleted successfully'}, {status: 200})
   } catch (error) {
     return NextResponse.json({message: error}, {status: 500})
