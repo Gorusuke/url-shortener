@@ -6,12 +6,19 @@ import TableLink from "@/ui/tableLink";
 import EditSearch from "@/ui/editSearch";
 import styles from "@/app/page.module.css";
 
-const DashboardUI = () => {
+interface UserInterface {
+  user: {
+    name?: string | null
+    email?: string | null
+    image?: string | null
+  }
+}
+
+const DashboardUI = ({ user }: UserInterface) => {
   const [urlText, setUrlText] = useState('')
   const [isEditing, setIsEditing] = useState(false)
   const [updateEffect, setUpdateEffect] = useState('')
   const [newUrl, setNewUrl] = useState('')
-  
 
   const createUrlShort = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
@@ -24,7 +31,7 @@ const DashboardUI = () => {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({urlText})
+      body: JSON.stringify({urlText, email: user.email})
     })
     const res = await result.json()
     setUpdateEffect(res.data)
@@ -44,7 +51,6 @@ const DashboardUI = () => {
         },
         body: JSON.stringify({value: urlText})
       })
-      console.log(result)
       if(result.status === 200) {
         setUpdateEffect(prev => prev + 'edit')
       }
@@ -60,6 +66,7 @@ const DashboardUI = () => {
         'Content-Type': 'application/json'
       }
     })
+
     if(result.status === 200){
       setUpdateEffect(prev => prev + 'delete')
     }
@@ -92,7 +99,6 @@ const DashboardUI = () => {
           : <InputSearch 
               urlText={urlText} 
               setUrlText={setUrlText}
-              isEditing={isEditing} 
               onClick={createUrlShort}
             />
         }
