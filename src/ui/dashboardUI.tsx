@@ -4,15 +4,8 @@ import { MouseEvent, useState } from "react";
 import InputSearch from "@/ui/inputSearch";
 import TableLink from "@/ui/tableLink";
 import EditSearch from "@/ui/editSearch";
+import { UserInterface } from "@/lib/interfaces";
 import styles from "@/app/page.module.css";
-
-interface UserInterface {
-  user: {
-    name?: string | null
-    email?: string | null
-    image?: string | null
-  }
-}
 
 const DashboardUI = ({ user }: UserInterface) => {
   const [urlText, setUrlText] = useState('')
@@ -88,7 +81,7 @@ const DashboardUI = ({ user }: UserInterface) => {
     <>
       <main className={styles.main}>
         <h1 className={styles.title}>Shorten Your Loooong Links!</h1>
-        <p className={styles.subtitle}>Linky is an efficient and easy-to-use URL shortening service that streamlines your online experience.</p>
+        <p className={styles.subtitle}>SHORTEN-URL is an efficient and easy-to-use URL shortening service that streamlines your online experience.</p>
         {isEditing 
           ? <EditSearch 
               urlText={urlText} 
