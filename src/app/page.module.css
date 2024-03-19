@@ -1,3 +1,11 @@
+.homeContainer {
+  display: grid;
+  place-content: center;
+  min-height: 90vh;
+  gap: 40px;
+  text-align: center;
+}
+
 .main {
   margin: 0 auto;
   margin-top: 100px;
