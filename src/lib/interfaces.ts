@@ -31,3 +31,11 @@ export interface EditSearchProps {
   handleCancel: () => void
   editShortUrl: () => void
 }
+
+export interface UserInterface {
+  user: {
+    name?: string | null
+    email?: string | null
+    image?: string | null
+  }
+}
