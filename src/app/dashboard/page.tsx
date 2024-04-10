@@ -16,10 +16,6 @@ export default async function Dashboard () {
   if(!session?.user) {
     redirect('/')
   }
-  
-  return (
-    <Suspense fallback={<div>Loading.......</div>}>
-      <DashboardUI user={session?.user}/>
-    </Suspense>
-  )
+
+  return <DashboardUI user={session?.user}/>
 }
